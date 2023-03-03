@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hzsun.zbp</groupId>
+    <artifactId>dysa-mc-stream</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>dysa Mc Job</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <flink.version>1.13.6</flink.version>
+        <java.version>1.8</java.version>
+        <scala.version>2.12</scala.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <log4j.version>2.17.2</log4j.version>
+    </properties>
+
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>apache.snapshots</id>-->
+    <!--            <name>Apache Development Snapshot Repository</name>-->
+    <!--            <url>https://repository.apache.org/content/repositories/snapshots/</url>-->
+    <!--            <releases>-->
+    <!--                <enabled>false</enabled>-->
+    <!--            </releases>-->
+    <!--            <snapshots>-->
+    <!--                <enabled>true</enabled>-->
+    <!--            </snapshots>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
+
+
+
+    <dependencies>
+<!--        java开发必备    每个包增加provided 打包的时候不会进行打包  -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-java</artifactId>
+            <version>${flink.version}</version>
+<!--        <scope>provided</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+<!--        <scope>provided</scope>-->
+        </dependency>
+        <!--        web ui 调试时可以开启-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.flink</groupId>-->
+<!--            <artifactId>flink-runtime-web_2.12</artifactId>-->
+<!--            <version>${flink.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+            <!--      反序列化kafka json 日志 （其实用alifastjson也可以） -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-json</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-csv</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+            <!--      dto list  转 jsonarray  string json 转 json   -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83</version>
+        </dependency>
+        <!--        table -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-api-java-bridge_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-planner-blink_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-common</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+            <!--jdbc-->
+            <!--     mysql连接器  6.0 以上用cj  -->
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--            <version>8.0.22</version>-->
+<!--        </dependency>-->
+<!--            &lt;!&ndash;   jdbc   必须   &ndash;&gt;-->
+<!--            <dependency>-->
+<!--			<groupId>org.apache.flink</groupId>-->
+<!--			<artifactId>flink-connector-jdbc_${scala.version}</artifactId>-->
+<!--			<version>${flink.version}</version>-->
+<!--		</dependency>-->
+<!--            &lt;!&ndash;        不写 table报错&ndash;&gt;-->
+<!--            <dependency>-->
+<!--            <groupId>com.ververica</groupId>-->
+<!--            <artifactId>flink-connector-mysql-cdc</artifactId>-->
+<!--            <version>2.0.2</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.apache.flink</groupId>-->
+<!--            <artifactId>flink-connector-hive_2.11</artifactId>-->
+<!--            <version>${flink.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--        <groupId>org.apache.hive</groupId>-->
+<!--            <artifactId>hive-exec</artifactId>-->
+<!--            <version>2.1.0</version>-->
+<!--            <exclusions>-->
+<!--                 <exclusion>-->
+<!--                     <groupId>org.apache.logging.log4j</groupId>-->
+<!--                    <artifactId>log4j-slf4j-impl</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--&lt;!&ndash;        连接hive 必备&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.flink</groupId>-->
+<!--            <artifactId>flink-hadoop-compatibility_2.11</artifactId>-->
+<!--            <version>${flink.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.flink</groupId>-->
+<!--            <artifactId>flink-shaded-hadoop-2-uber</artifactId>-->
+<!--            <version>2.7.5-8.0</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-log4j12</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hadoop</groupId>-->
+<!--            <artifactId>hadoop-common</artifactId>-->
+<!--            <version>2.7.4</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                     <groupId>org.slf4j</groupId>-->
+<!--                       <artifactId>slf4j-log4j12</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hadoop</groupId>-->
+<!--            <artifactId>hadoop-client</artifactId>-->
+<!--            <version>2.7.4</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                     <groupId>org.slf4j</groupId>-->
+<!--                       <artifactId>slf4j-log4j12</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hadoop</groupId>-->
+<!--            <artifactId>hadoop-hdfs</artifactId>-->
+<!--            <version>2.7.4</version>-->
+<!--        </dependency>-->
+
+
+
+            <!-- slf4j1-->
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>slf4j-nop</artifactId>-->
+<!--            <version>1.7.2</version>-->
+<!--        </dependency>-->
+
+
+            <!--     slf4j2  可能要配置   -->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-slf4j-impl</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--&lt;!&ndash;            <scope>runtime</scope>&ndash;&gt;-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-api</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--&lt;!&ndash;            <scope>runtime</scope>&ndash;&gt;-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-core</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--&lt;!&ndash;            <scope>runtime</scope>&ndash;&gt;-->
+<!--        </dependency>-->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+<!--                    只生成一个 jar -->
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.hzsun.zbp.mc.OLAPJob</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>mc-OLAPJob-0905</finalName>
+    </build>
+
+    
+</project>

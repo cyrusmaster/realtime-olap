@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hzsun.zbp</groupId>
+    <artifactId>dysa-iot-stream</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+<!--    <name>DWStreamJob</name>-->
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <flink.version>1.13.6</flink.version>
+        <java.version>1.8</java.version>
+        <scala.version>2.12</scala.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <log4j.version>2.17.2</log4j.version>
+    </properties>
+
+
+    <dependencies>
+<!--        java开发必备-->
+            <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-java</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+            <!--      kafka连flink 需要  -->
+            <!--        <dependency>-->
+            <!--            <groupId>org.apache.kafka</groupId>-->
+            <!--            <artifactId>kafka-clients</artifactId>-->
+            <!--            <version>2.8.1</version>-->
+            <!--        </dependency>-->
+            <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+            <!--        本地输出必要 不然报错-->
+            <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+            <!--      反序列化kafka json 日志 （其实用alifastjson也可以） -->
+            <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-json</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+            <!--      dto list  转 jsonarray  string json 转 json   -->
+            <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83</version>
+        </dependency>
+
+            <!--        table -->
+            <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-api-java-bridge_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-planner-blink_${scala.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-csv</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-common</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+
+
+
+
+
+
+<!-- slf4j1  不显示 debug 日志-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.slf4j</groupId>-->
+<!--                        <artifactId>slf4j-nop</artifactId>-->
+<!--                        <version>1.7.2</version>-->
+<!--                    </dependency>-->
+
+
+        <!--     slf4j2  会报警告 可能要配置   -->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-slf4j-impl</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-api</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-core</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--        </dependency>-->
+
+
+
+
+    </dependencies>
+
+
+<!--   每个包增加provided 打包的时候不会进行打包  -->
+
+
+    <build>
+        <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.6.2</version>-->
+<!--                <configuration>-->
+<!--                    <source>1.8</source>-->
+<!--                    <target>1.8</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--             第一种打包方式 自定义的打包结构，也可以定制依赖项等 maven-assembly-plugin  所有依赖都放在jar中  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.hzsun.zbp.iot.APPJob</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                      <!-- mvn package打包 无需assembly:single -->
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 只运行一次 -->
+<!--                            <goal>assembly</goal>-->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>iot-APPJob-0905</finalName>
+    </build>
+
+    
+</project>
